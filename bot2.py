@@ -13,7 +13,6 @@ if __name__ == "__main__":
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-# Fungsi server web dummy agar Render tidak mendeteksi error port
 class SimpleHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
