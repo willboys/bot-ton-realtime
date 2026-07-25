@@ -1,5 +1,4 @@
-Microsoft Windows [Version 10.0.26200.8894]
-(c) Microsoft Corporation. All rights reserved.
+
 
 C:\Users\User>cd %USERPROFILE%\Documents
 
