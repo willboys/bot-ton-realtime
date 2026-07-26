@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: bot-ton-realtime
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 bot2.py
+    autoDeploy: true
