@@ -12,24 +12,23 @@ CHAT_ID = "-1003771467296"
 bot = Bot(TOKEN)
 last_price = None
 
-# Server web wajib agar Render mendeteksi port aktif
+# Server web dummy agar Render menganggap layanan aktif (Live)
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(b"Bot is running!")
+        self.wfile.write(b"Bot is active!")
 
 def run_server():
     port = int(os.environ.get("PORT", 10000))
     server = HTTPServer(("0.0.0.0", port), Handler)
     server.serve_forever()
 
-# Jalankan server web di background thread
+# Menjalankan server web di latar belakang
 threading.Thread(target=run_server, daemon=True).start()
 
 async def main():
     global last_price
-    print("Bot started successfully...")
     while True:
         try:
             url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=idr,usd,rub"
@@ -62,13 +61,13 @@ async def main():
 🇺🇸 USD : ${usd}
 🇷🇺 RUB : ₽{rub}"""
 
-            # Menggunakan await yang benar agar pesan terkirim
             await bot.send_message(chat_id=CHAT_ID, text=text, parse_mode="Markdown")
             last_price = idr
 
         except Exception as e:
             print("Error:", e)
 
+        # Bot akan menunggu 60 detik sebelum mengirim update harga berikutnya
         await asyncio.sleep(60)
 
 if __name__ == "__main__":
