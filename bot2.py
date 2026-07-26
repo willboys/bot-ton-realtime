@@ -1,8 +1,6 @@
-import os
-import asyncio
-import requests
-import threading
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import time
+import json
+import urllib.request
 from telegram import Bot
 
 TOKEN = "7581064589:AAH-y6s4CyvmpTM3X3S0hnzuPGyHc4x8eI"
@@ -11,24 +9,17 @@ CHAT_ID = "-1003771467296"
 bot = Bot(TOKEN)
 last_price = None
 
-class Handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"Bot Running")
-
-def web():
-    port = int(os.environ.get("PORT", 10000))
-    HTTPServer(("0.0.0.0", port), Handler).serve_forever()
-
-threading.Thread(target=web, daemon=True).start()
-
-async def main():
+def main():
     global last_price
+    print("Bot started...")
     while True:
         try:
             url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=idr,usd,rub"
-            data = requests.get(url, timeout=20).json()
+            
+            # Menggunakan urllib bawaan Python murni (tidak butuh requests sama sekali)
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=20) as response:
+                data = json.loads(response.read().decode())
             
             idr = data["the-open-network"]["idr"]
             usd = data["the-open-network"]["usd"]
@@ -55,13 +46,14 @@ async def main():
 🇺🇸 USD : ${usd}
 🇷🇺 RUB : ₽{rub}"""
 
-            await bot.send_message(chat_id=CHAT_ID, text=text, parse_mode="Markdown")
+            # Menggunakan perintah sync agar kompatibel di semua versi telegram-bot
+            bot.send_message(chat_id=CHAT_ID, text=text, parse_mode="Markdown")
             last_price = idr
 
         except Exception as e:
             print("Error:", e)
 
-        await asyncio.sleep(60)
+        time.sleep(60)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
