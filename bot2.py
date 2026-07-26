@@ -12,7 +12,6 @@ CHAT_ID = "-1003771467296"
 bot = Bot(TOKEN)
 last_price = None
 
-# Server web dummy agar Render menganggap layanan aktif (Live)
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -24,7 +23,7 @@ def run_server():
     server = HTTPServer(("0.0.0.0", port), Handler)
     server.serve_forever()
 
-# Menjalankan server web di latar belakang
+# Menjalankan server web di background agar port terbuka dan tidak error
 threading.Thread(target=run_server, daemon=True).start()
 
 async def main():
@@ -67,7 +66,6 @@ async def main():
         except Exception as e:
             print("Error:", e)
 
-        # Bot akan menunggu 60 detik sebelum mengirim update harga berikutnya
         await asyncio.sleep(60)
 
 if __name__ == "__main__":
