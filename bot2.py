@@ -15,12 +15,10 @@ def main():
     while True:
         try:
             url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=idr,usd,rub"
-            
-            # Menggunakan urllib bawaan Python murni (tidak butuh requests sama sekali)
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(req, timeout=20) as response:
                 data = json.loads(response.read().decode())
-            
+
             idr = data["the-open-network"]["idr"]
             usd = data["the-open-network"]["usd"]
             rub = data["the-open-network"]["rub"]
@@ -46,7 +44,6 @@ def main():
 🇺🇸 USD : ${usd}
 🇷🇺 RUB : ₽{rub}"""
 
-            # Menggunakan perintah sync agar kompatibel di semua versi telegram-bot
             bot.send_message(chat_id=CHAT_ID, text=text, parse_mode="Markdown")
             last_price = idr
 
