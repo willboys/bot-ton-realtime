@@ -5,8 +5,8 @@ import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from telegram import Bot
 
-TOKEN = os.environ["TOKEN"]
-CHAT_ID = os.environ["CHAT_ID"]
+TOKEN = os.environ["7581064589:AAH-y6s4CyvmpTM3X3S0hnzpuTgyHc4x8eI"]
+CHAT_ID = os.environ["-1003771467296"]
 
 bot = Bot(TOKEN)
 
