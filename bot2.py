@@ -1,6 +1,7 @@
 import os
 import asyncio
-import requests
+import json
+import urllib.request
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from telegram import Bot
@@ -28,7 +29,11 @@ async def main():
     while True:
         try:
             url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=idr,usd,rub"
-            data = requests.get(url, timeout=20).json()
+            
+            # Menggunakan urllib bawaan Python agar tidak perlu modul requests
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=20) as response:
+                data = json.loads(response.read().decode())
             
             idr = data["the-open-network"]["idr"]
             usd = data["the-open-network"]["usd"]
@@ -59,7 +64,7 @@ async def main():
             last_price = idr
 
         except Exception as e:
-            print(e)
+            print("Error:", e)
 
         await asyncio.sleep(60)
 
